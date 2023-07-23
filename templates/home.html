@@ -17,9 +17,6 @@
         <li><a href="{% url 'view_question' question.id %}">{{ question.title }}</a></li>
         {% endfor %}
     </ul>
-
-
-
     <form action="/home/" method="POST" enctype="multipart/form-data" class="form">
         {% csrf_token %}
         {{form.title}}
