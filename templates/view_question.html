@@ -1,4 +1,4 @@
-
+{% load static%}
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,41 +31,7 @@
         <button type="Submit">Answer</button>
     </form>
     {% include 'footer.html' %}
-
-    <script>
-        $(document).ready(function() {
-            var isClickable = true;
-    
-            $('.like-btn').click(function() {
-                if (isClickable) {
-                    isClickable = false;
-    
-                    var answerId = $(this).data('answer-id');
-                    var likeCountElement = $(this).siblings('.like-count');
-    
-                    $.ajax({
-                        type: 'POST',
-                        url: '/like/' + answerId + '/',
-                        data: {
-                            'csrfmiddlewaretoken': '{{ csrf_token }}',
-                        },
-                        success: function(data) {
-                            likeCountElement.text(data.likes);
-                        },
-                        error: function(error) {
-                            console.log('Error:', error);
-                        },
-                        complete: function() {
-                            setTimeout(function() {
-                                isClickable = true;
-                            }, 2000); // Set the clickability to true after 5 seconds (5000 milliseconds)
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-    
+    <script src="{% static 'under.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
