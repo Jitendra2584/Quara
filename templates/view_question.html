@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Question</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>{{ question.title }}</h1>
+    <p>{{ question.description }}</p>
+    <h2>Answers:</h2>
+    <ul>
+        {% for answer in answers %}
+        <li>{{ answer.user.username }} - {{ answer.content }} 
+            {{ answer.content }} - {{ answer.user.username }} 
+            <button class="like-btn" data-answer-id="{{ answer.id }}">Like</button>
+            <span class="like-count">{{ answer.like_set.count }}</span>
+        {% endfor %}
+    </ul>
+    <h3>Post Your Answer:</h3>
+    <form method="post" action="{% url 'view_question' question.id %}">
+        {% csrf_token %}
+        {{form.content}}
+        <button type="Submit">Answer</button>
+    </form>
+
+    <script>
+        // AJAX function to handle like button click
+        $(document).ready(function() {
+            $('.like-btn').click(function() {
+                var answerId = $(this).data('answer-id');
+                var likeCountElement = $(this).siblings('.like-count');
+                $.ajax({
+                    type: 'POST',
+                    url: '/like/' + answerId + '/',
+                    data: {
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    success: function(data) {
+                        likeCountElement.text(data.likes);
+                    },
+                    error: function(error) {
+                        console.log('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>

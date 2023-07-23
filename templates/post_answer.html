@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post an Answer</title>
+</head>
+<body>
+    <h1>Post an Answer</h1>
+    <form method="post" action="{% url 'post_answer' question.id %}">
+        {% csrf_token %}
+        <label for="content">Your Answer:</label><br>
+        <textarea name="content" required></textarea><br>
+        <input type="submit" value="Post Answer">
+    </form>
+    <a href="{% url 'view_question' question.id %}">Back to Question</a>
+</body>
+</html>
