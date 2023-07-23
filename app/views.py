@@ -61,7 +61,7 @@ def view_question(request, question_id):
 
 
 
-@login_required
+@authenticated_user_required
 def like_answer(request, answer_id):
     answer = get_object_or_404(Answer, id=answer_id)
     like, created = Like.objects.get_or_create(user=request.user, answer=answer)
@@ -242,7 +242,7 @@ def passwordResetConfirm(request, uidb64, token):
             if form.is_valid():
                 form.save()
                 login(request,user)
-                return redirect('home')
+                return redirect('login')
             else:
                 errors=form.errors.values()
                 return render(request, 'password_reset_confirm.html', {'form': form,'errors':errors})
