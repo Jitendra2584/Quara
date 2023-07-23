@@ -10,6 +10,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from .decorators import authenticated_user_required
+from django.db.models import Count
 from .tokens import account_activation_token
 from django.db.models.query_utils import Q
 from django.http import JsonResponse
@@ -37,30 +38,25 @@ def HomePage(request):
 @authenticated_user_required
 def view_question(request, question_id):
     question = get_object_or_404(Question, id=question_id)
-    answers = Answer.objects.filter(question=question)
     if request.method=='POST':
         form=AnswerForm(request.POST)
         if form.is_valid():
             content=form.cleaned_data['content']
-            user=request.user
+            print(content)
             question=question
+            
             answer = Answer.objects.create(content=content, user=request.user, question=question)
-
+        else:
+            print(form.errors)
+        answers = Answer.objects.filter(question=question).annotate(num_likes=Count('like')).order_by('num_likes')
         return render(request, 'view_question.html', {'question': question, 'answers': answers,'form':AnswerForm()})
 
     form=AnswerForm()
+    answers = Answer.objects.filter(question=question).annotate(num_likes=Count('like')).order_by('num_likes')
     return render(request, 'view_question.html', {'question': question, 'answers': answers,'form':form})
 
 
 
-# @authenticated_user_required
-# def post_answer(request, question_id):
-#     question = get_object_or_404(Question, id=question_id)
-#     if request.method == 'POST':
-#         content = request.POST['content']
-#         answer = Answer.objects.create(content=content, user=request.user, question=question)
-#         return redirect('view_question', question_id=question_id)
-#     return render(request, 'post_answer.html', {'question': question})
 
 @login_required
 def like_answer(request, answer_id):

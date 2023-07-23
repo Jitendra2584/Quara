@@ -19,7 +19,6 @@
     <ul>
         {% for answer in answers %}
         <li>{{ answer.user.username }} - {{ answer.content }} 
-            {{ answer.content }} - {{ answer.user.username }} 
             <button class="like-btn" data-answer-id="{{ answer.id }}">Like</button>
             <span class="like-count">{{ answer.like_set.count }}</span>
         {% endfor %}
