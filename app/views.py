@@ -24,14 +24,17 @@ from .models import Question, Answer
 
 @authenticated_user_required
 def HomePage(request):
-    questions = Question.objects.all()
+    
     if request.method=='POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
-            form.save()
-
+            title=form.cleaned_data['title']
+            user=request.user
+            qns=Question.objects.create(title=title,user=user)
+        questions = Question.objects.all()
         return render(request, 'home.html', {'questions': questions,'form':QuestionForm()})
     form=QuestionForm()
+    questions = Question.objects.all()
     return render(request, 'home.html', {'questions': questions,'form':form})
 
 

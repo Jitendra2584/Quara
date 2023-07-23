@@ -14,7 +14,9 @@
     <h2>Latest Questions:</h2>
     <ul>
         {% for question in questions %}
-        <li><a href="{% url 'view_question' question.id %}">{{ question.title }}</a></li>
+
+        <li> {{question.user}}:-
+            <a href="{% url 'view_question' question.id %}">{{ question.title }}</a></li>
         {% endfor %}
     </ul>
     <form action="/home/" method="POST" enctype="multipart/form-data" class="form">

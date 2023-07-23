@@ -87,8 +87,8 @@ DATABASES = {
         'NAME':  'railway',
         'USER':'postgres',
         'PASSWORD':str(os.getenv('Password')),
-        'HOST':'containers-us-west-203.railway.app',
-        'PORT':5529,
+        'HOST':'containers-us-west-205.railway.app',
+        'PORT':5920,
     }
 }
 
