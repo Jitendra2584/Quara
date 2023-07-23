@@ -1,1 +1,6 @@
 .env
+Env_git
+env/
+*.pyc
+*.pyo
+__pycache__/
