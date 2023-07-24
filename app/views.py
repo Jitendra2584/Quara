@@ -40,6 +40,7 @@ def HomePage(request):
 
 @authenticated_user_required
 def view_question(request, question_id):
+    user_liked=[]
     question = get_object_or_404(Question, id=question_id)
     if request.method=='POST':
         form=AnswerForm(request.POST)
@@ -47,11 +48,14 @@ def view_question(request, question_id):
             content=form.cleaned_data['content']
             print(content)
             question=question
-            
             answer = Answer.objects.create(content=content, user=request.user, question=question)
         else:
             print(form.errors)
         answers = Answer.objects.filter(question=question).annotate(num_likes=Count('like')).order_by('num_likes')
+        for ans in answers:
+            if Like.objects.filter(user=request.user,answer=ans).exists():
+                user_liked.append(ans.id)
+        print(user_liked)
         return render(request, 'view_question.html', {'question': question, 'answers': answers,'form':AnswerForm()})
 
     form=AnswerForm()
@@ -65,12 +69,22 @@ def view_question(request, question_id):
 def like_answer(request, answer_id):
     answer = get_object_or_404(Answer, id=answer_id)
     like, created = Like.objects.get_or_create(user=request.user, answer=answer)
+    is_liked=Like.objects.filter(user=request.user,answer=answer).exists()
 
     if not created:
         like.delete()
 
     like_count = answer.like_set.count()
-    return JsonResponse({'likes': like_count})
+    return JsonResponse({'likes': like_count,'is_liked': is_liked})
+
+
+
+@authenticated_user_required
+def is_answer_liked(request, answer_id):
+    user = request.user
+    answer = get_object_or_404(Answer, id=answer_id)
+    is_liked = Like.objects.filter(user=user, answer=answer).exists()
+    return JsonResponse({'is_liked': is_liked})
 
 
 

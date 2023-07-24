@@ -15,4 +15,5 @@ urlpatterns = [
     path('reset/<uidb64>/<token>', views.passwordResetConfirm, name='password_reset_confirm'),
     path('question/<int:question_id>/', views.view_question, name='view_question'),
     path('like/<int:answer_id>/', views.like_answer, name='like_answer'),
+    path('is_liked/<int:answer_id>/', views.is_answer_liked, name='is_answer_liked'),
 ]
