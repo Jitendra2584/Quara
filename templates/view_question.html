@@ -12,7 +12,7 @@
 
 </head>
 <body>
-    {% include 'navbar.html' %}
+    {% include 'includes/navbar.html' %}
     <h1>{{ question.title }}</h1>
     
     <h2>Answers:</h2>
@@ -29,7 +29,7 @@
         {{form.content}}
         <button type="Submit">Answer</button>
     </form>
-    {% include 'footer.html' %}
+    {% include 'includes/footer.html' %}
     <script src="{% static 'under.js' %}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
